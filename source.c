@@ -17,7 +17,7 @@ struct powerbar {
 	GtkWidget *poweroff_button;
 };
 
-const gchar module_version[] = "v1.3.5";
+const gchar module_version[] = "v1.3.6";
 
 static int self_id;
 
