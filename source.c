@@ -17,6 +17,8 @@ struct powerbar {
 	GtkWidget *poweroff_button;
 };
 
+const gchar module_version[] = "v1.3.5";
+
 static int self_id;
 
 static gboolean show_labels = FALSE;
