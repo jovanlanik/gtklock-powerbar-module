@@ -77,9 +77,6 @@ static void setup_powerbar(struct Window *ctx) {
 	gtk_widget_show_all(POWERBAR(ctx)->revealer);
 }
 
-void g_module_unload(GModule *m) {
-}
-
 void on_activation(struct GtkLock *gtklock, int id) {
 	self_id = id;
 	config_load(gtklock->config_path, "powerbar", powerbar_entries);
