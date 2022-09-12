@@ -22,11 +22,13 @@ const gchar module_version[] = "v1.3.6";
 static int self_id;
 
 static gboolean show_labels = FALSE;
+static gboolean linked_buttons = FALSE;
 static gchar *reboot_command = "systemctl reboot";
 static gchar *poweroff_command = "systemctl -i poweroff";
 
 static GOptionEntry powerbar_entries[] = {
 	{ "show-labels", 0, 0, G_OPTION_ARG_NONE, &show_labels, NULL, NULL },
+	{ "linked-buttons", 0, 0, G_OPTION_ARG_NONE, &linked_buttons, NULL, NULL },
 	{ "reboot-command", 0, 0, G_OPTION_ARG_STRING, &reboot_command, NULL, NULL },
 	{ "poweroff-command", 0, 0, G_OPTION_ARG_STRING, &poweroff_command, NULL, NULL },
 	{ NULL },
@@ -53,7 +55,10 @@ static void setup_powerbar(struct Window *ctx) {
 	gtk_revealer_set_transition_type(GTK_REVEALER(POWERBAR(ctx)->revealer), GTK_REVEALER_TRANSITION_TYPE_NONE);
 	gtk_overlay_add_overlay(GTK_OVERLAY(ctx->overlay), POWERBAR(ctx)->revealer);
 
-	POWERBAR(ctx)->box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
+	if(linked_buttons) {
+		POWERBAR(ctx)->box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
+		gtk_button_box_set_layout(GTK_BUTTON_BOX(POWERBAR(ctx)->box), GTK_BUTTONBOX_EXPAND);
+	} else POWERBAR(ctx)->box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_widget_set_halign(POWERBAR(ctx)->box, GTK_ALIGN_CENTER);
 	gtk_widget_set_name(POWERBAR(ctx)->box, "powerbar-box");
 	gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->revealer), POWERBAR(ctx)->box);
