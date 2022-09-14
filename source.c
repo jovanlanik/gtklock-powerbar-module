@@ -17,6 +17,7 @@ struct powerbar {
 	GtkWidget *poweroff_button;
 };
 
+const gchar module_name[] = "powerbar";
 const gchar module_version[] = "v1.3.6";
 
 static int self_id;
@@ -26,7 +27,7 @@ static gboolean linked_buttons = FALSE;
 static gchar *reboot_command = "systemctl reboot";
 static gchar *poweroff_command = "systemctl -i poweroff";
 
-static GOptionEntry powerbar_entries[] = {
+GOptionEntry module_entries[] = {
 	{ "show-labels", 0, 0, G_OPTION_ARG_NONE, &show_labels, NULL, NULL },
 	{ "linked-buttons", 0, 0, G_OPTION_ARG_NONE, &linked_buttons, NULL, NULL },
 	{ "reboot-command", 0, 0, G_OPTION_ARG_STRING, &reboot_command, NULL, NULL },
@@ -84,7 +85,6 @@ static void setup_powerbar(struct Window *ctx) {
 
 void on_activation(struct GtkLock *gtklock, int id) {
 	self_id = id;
-	config_load(gtklock->config_path, "powerbar", powerbar_entries);
 }
 
 void on_focus_change(struct GtkLock *gtklock, struct Window *win, struct Window *old) {
