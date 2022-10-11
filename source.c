@@ -18,7 +18,8 @@ struct powerbar {
 };
 
 const gchar module_name[] = "powerbar";
-const gchar module_version[] = "v1.3.7";
+const guint module_major_version = 2;
+const guint module_minor_version = 0;
 
 static int self_id;
 
@@ -95,7 +96,7 @@ void on_focus_change(struct GtkLock *gtklock, struct Window *win, struct Window 
 		gtk_revealer_set_reveal_child(GTK_REVEALER(POWERBAR(old)->revealer), FALSE);
 }
 
-void on_window_empty(struct GtkLock *gtklock, struct Window *ctx) {
+void on_window_destroy(struct GtkLock *gtklock, struct Window *ctx) {
 	if(MODULE_DATA(ctx) != NULL) {
 		g_free(MODULE_DATA(ctx));
 		MODULE_DATA(ctx) = NULL;
