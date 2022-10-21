@@ -15,6 +15,9 @@ struct powerbar {
 	GtkWidget *box;
 	GtkWidget *reboot_button;
 	GtkWidget *poweroff_button;
+	GtkWidget *suspend_button;
+	GtkWidget *userswitch_button;
+	GtkWidget *logout_button;
 };
 
 const gchar module_name[] = "powerbar";
@@ -27,12 +30,18 @@ static gboolean show_labels = FALSE;
 static gboolean linked_buttons = FALSE;
 static gchar *reboot_command = "systemctl reboot";
 static gchar *poweroff_command = "systemctl -i poweroff";
+static gchar *suspend_command = "systemctl suspend";
+static gchar *userswitch_command = NULL;
+static gchar *logout_command = NULL;
 
 GOptionEntry module_entries[] = {
 	{ "show-labels", 0, 0, G_OPTION_ARG_NONE, &show_labels, NULL, NULL },
 	{ "linked-buttons", 0, 0, G_OPTION_ARG_NONE, &linked_buttons, NULL, NULL },
 	{ "reboot-command", 0, 0, G_OPTION_ARG_STRING, &reboot_command, NULL, NULL },
 	{ "poweroff-command", 0, 0, G_OPTION_ARG_STRING, &poweroff_command, NULL, NULL },
+	{ "suspend-command", 0, 0, G_OPTION_ARG_STRING, &suspend_command, NULL, NULL },
+	{ "userswitch-command", 0, 0, G_OPTION_ARG_STRING, &userswitch_command, NULL, NULL },
+	{ "logout-command", 0, 0, G_OPTION_ARG_STRING, &logout_command, NULL, NULL },
 	{ NULL },
 };
 
@@ -65,21 +74,55 @@ static void setup_powerbar(struct Window *ctx) {
 	gtk_widget_set_name(POWERBAR(ctx)->box, "powerbar-box");
 	gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->revealer), POWERBAR(ctx)->box);
 
-	POWERBAR(ctx)->reboot_button = gtk_button_new_from_icon_name("view-refresh", GTK_ICON_SIZE_BUTTON);
-	gtk_widget_set_name(POWERBAR(ctx)->reboot_button, "reboot-button");
-	//gtk_widget_set_tooltip_text(POWERBAR(ctx)->reboot_button, "Reboot");
-	gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->reboot_button), TRUE);
-	if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->reboot_button), "Reboot");
-	g_signal_connect(POWERBAR(ctx)->reboot_button, "clicked", G_CALLBACK(button_clicked), reboot_command);
-	gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->box), POWERBAR(ctx)->reboot_button);
+	if(poweroff_command && poweroff_command[0] != '\0') {
+		POWERBAR(ctx)->poweroff_button = gtk_button_new_from_icon_name("system-shutdown-symbolic", GTK_ICON_SIZE_BUTTON);
+		gtk_widget_set_name(POWERBAR(ctx)->poweroff_button, "poweroff-button");
+		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->poweroff_button, "Poweroff");
+		gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->poweroff_button), TRUE);
+		if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->poweroff_button), "Poweroff");
+		g_signal_connect(POWERBAR(ctx)->poweroff_button, "clicked", G_CALLBACK(button_clicked), poweroff_command);
+		gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->box), POWERBAR(ctx)->poweroff_button);
+	}
 
-	POWERBAR(ctx)->poweroff_button = gtk_button_new_from_icon_name("process-stop", GTK_ICON_SIZE_BUTTON);
-	gtk_widget_set_name(POWERBAR(ctx)->poweroff_button, "poweroff-button");
-	//gtk_widget_set_tooltip_text(POWERBAR(ctx)->poweroff_button, "Poweroff");
-	gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->poweroff_button), TRUE);
-	if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->poweroff_button), "Poweroff");
-	g_signal_connect(POWERBAR(ctx)->poweroff_button, "clicked", G_CALLBACK(button_clicked), poweroff_command);
-	gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->box), POWERBAR(ctx)->poweroff_button);
+	if(reboot_command && reboot_command[0] != '\0') {
+		POWERBAR(ctx)->reboot_button = gtk_button_new_from_icon_name("view-refresh-symbolic", GTK_ICON_SIZE_BUTTON);
+		gtk_widget_set_name(POWERBAR(ctx)->reboot_button, "reboot-button");
+		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->reboot_button, "Reboot");
+		gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->reboot_button), TRUE);
+		if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->reboot_button), "Reboot");
+		g_signal_connect(POWERBAR(ctx)->reboot_button, "clicked", G_CALLBACK(button_clicked), reboot_command);
+		gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->box), POWERBAR(ctx)->reboot_button);
+	}
+
+	if(suspend_command && suspend_command[0] != '\0') {
+		POWERBAR(ctx)->suspend_button = gtk_button_new_from_icon_name("preferences-desktop-screensaver-symbolic", GTK_ICON_SIZE_BUTTON);
+		gtk_widget_set_name(POWERBAR(ctx)->suspend_button, "suspend-button");
+		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->suspend_button, "Reboot");
+		gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->suspend_button), TRUE);
+		if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->suspend_button), "Reboot");
+		g_signal_connect(POWERBAR(ctx)->suspend_button, "clicked", G_CALLBACK(button_clicked), suspend_command);
+		gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->box), POWERBAR(ctx)->suspend_button);
+	}
+
+	if(userswitch_command && userswitch_command[0] != '\0') {
+		POWERBAR(ctx)->userswitch_button = gtk_button_new_from_icon_name("system-users-symbolic", GTK_ICON_SIZE_BUTTON);
+		gtk_widget_set_name(POWERBAR(ctx)->userswitch_button, "userswitch-button");
+		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->userswitch_button, "Switch user");
+		gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->userswitch_button), TRUE);
+		if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->userswitch_button), "Switch user");
+		g_signal_connect(POWERBAR(ctx)->userswitch_button, "clicked", G_CALLBACK(button_clicked), userswitch_command);
+		gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->box), POWERBAR(ctx)->userswitch_button);
+	}
+
+	if(logout_command && logout_command[0] != '\0') {
+		POWERBAR(ctx)->logout_button = gtk_button_new_from_icon_name("system-log-out-symbolic", GTK_ICON_SIZE_BUTTON);
+		gtk_widget_set_name(POWERBAR(ctx)->logout_button, "logout-button");
+		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->logout_button, "Switch user");
+		gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->logout_button), TRUE);
+		if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->logout_button), "Switch user");
+		g_signal_connect(POWERBAR(ctx)->logout_button, "clicked", G_CALLBACK(button_clicked), logout_command);
+		gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->box), POWERBAR(ctx)->logout_button);
+	}
 
 	gtk_widget_show_all(POWERBAR(ctx)->revealer);
 }
