@@ -97,9 +97,9 @@ static void setup_powerbar(struct Window *ctx) {
 	if(suspend_command && suspend_command[0] != '\0') {
 		POWERBAR(ctx)->suspend_button = gtk_button_new_from_icon_name("preferences-desktop-screensaver-symbolic", GTK_ICON_SIZE_BUTTON);
 		gtk_widget_set_name(POWERBAR(ctx)->suspend_button, "suspend-button");
-		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->suspend_button, "Reboot");
+		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->suspend_button, "Suspend");
 		gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->suspend_button), TRUE);
-		if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->suspend_button), "Reboot");
+		if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->suspend_button), "Suspend");
 		g_signal_connect(POWERBAR(ctx)->suspend_button, "clicked", G_CALLBACK(button_clicked), suspend_command);
 		gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->box), POWERBAR(ctx)->suspend_button);
 	}
@@ -117,9 +117,9 @@ static void setup_powerbar(struct Window *ctx) {
 	if(logout_command && logout_command[0] != '\0') {
 		POWERBAR(ctx)->logout_button = gtk_button_new_from_icon_name("system-log-out-symbolic", GTK_ICON_SIZE_BUTTON);
 		gtk_widget_set_name(POWERBAR(ctx)->logout_button, "logout-button");
-		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->logout_button, "Switch user");
+		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->logout_button, "Log out");
 		gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->logout_button), TRUE);
-		if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->logout_button), "Switch user");
+		if(show_labels) gtk_button_set_label(GTK_BUTTON(POWERBAR(ctx)->logout_button), "Log out");
 		g_signal_connect(POWERBAR(ctx)->logout_button, "clicked", G_CALLBACK(button_clicked), logout_command);
 		gtk_container_add(GTK_CONTAINER(POWERBAR(ctx)->box), POWERBAR(ctx)->logout_button);
 	}
