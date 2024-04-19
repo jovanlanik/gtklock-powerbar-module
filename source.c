@@ -21,7 +21,7 @@ struct powerbar {
 };
 
 const gchar module_name[] = "powerbar";
-const guint module_major_version = 2;
+const guint module_major_version = 3;
 const guint module_minor_version = 0;
 
 static int self_id;
@@ -95,7 +95,7 @@ static void setup_powerbar(struct Window *ctx) {
 	}
 
 	if(suspend_command && suspend_command[0] != '\0') {
-		POWERBAR(ctx)->suspend_button = gtk_button_new_from_icon_name("media-playback-pause-symbolic", GTK_ICON_SIZE_BUTTON);
+		POWERBAR(ctx)->suspend_button = gtk_button_new_from_icon_name("weather-clear-night-symbolic", GTK_ICON_SIZE_BUTTON);
 		gtk_widget_set_name(POWERBAR(ctx)->suspend_button, "suspend-button");
 		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->suspend_button, "Suspend");
 		gtk_button_set_always_show_image(GTK_BUTTON(POWERBAR(ctx)->suspend_button), TRUE);
@@ -105,6 +105,7 @@ static void setup_powerbar(struct Window *ctx) {
 	}
 
 	if(userswitch_command && userswitch_command[0] != '\0') {
+		// No suspend icon in GTK...
 		POWERBAR(ctx)->userswitch_button = gtk_button_new_from_icon_name("system-users-symbolic", GTK_ICON_SIZE_BUTTON);
 		gtk_widget_set_name(POWERBAR(ctx)->userswitch_button, "userswitch-button");
 		//gtk_widget_set_tooltip_text(POWERBAR(ctx)->userswitch_button, "Switch user");
