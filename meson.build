@@ -18,8 +18,15 @@ dependencies = [
 
 gtklock_powerbar_module_sources = files('source.c')
 
+gnome = import('gnome')
+icons_resources = gnome.compile_resources(
+  'icons-resources', 'icons.gresource.xml',
+  c_name : 'icons',
+)
+
 gtklock_powerbar_module_set = [
   gtklock_powerbar_module_sources,
+  icons_resources,
 ]
 
 if import('fs').is_absolute(get_option('libdir'))

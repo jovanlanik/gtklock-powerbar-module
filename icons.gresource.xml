@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+	<gresource prefix="/gtklock/powerbar/icons/scalable/actions">
+		<file alias="gtklock-powerbar-moon-outline-symbolic.svg">moon-outline-symbolic.svg</file>
+	</gresource>
+</gresources>
