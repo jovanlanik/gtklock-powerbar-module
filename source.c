@@ -33,6 +33,7 @@ static gchar *poweroff_command = "systemctl -i poweroff";
 static gchar *suspend_command = "systemctl suspend";
 static gchar *userswitch_command = NULL;
 static gchar *logout_command = NULL;
+static gint button_timeout = 500;
 
 GOptionEntry module_entries[] = {
 	{ "show-labels", 0, 0, G_OPTION_ARG_NONE, &show_labels, NULL, NULL },
@@ -42,10 +43,20 @@ GOptionEntry module_entries[] = {
 	{ "suspend-command", 0, 0, G_OPTION_ARG_STRING, &suspend_command, NULL, NULL },
 	{ "userswitch-command", 0, 0, G_OPTION_ARG_STRING, &userswitch_command, NULL, NULL },
 	{ "logout-command", 0, 0, G_OPTION_ARG_STRING, &logout_command, NULL, NULL },
+	{ "button-timeout", 0, 0, G_OPTION_ARG_INT, &button_timeout, NULL, NULL },
 	{ NULL },
 };
 
+static gboolean button_timeout_handler(gpointer user_data) {
+	gtk_widget_set_sensitive(GTK_WIDGET(user_data), TRUE);
+	return G_SOURCE_REMOVE;
+}
+
 static void button_clicked(GtkButton *self, gpointer user_data) {
+	if(button_timeout > 0) {
+		gtk_widget_set_sensitive(GTK_WIDGET(self), FALSE);
+		g_timeout_add(button_timeout, G_SOURCE_FUNC(button_timeout_handler), self);
+	}
 	g_spawn_command_line_async(user_data, NULL);
 }
 
